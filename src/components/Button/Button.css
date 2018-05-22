@@ -1,0 +1,12 @@
+.button {
+  color: white;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  text-align: center;
+  margin: 0.5rem;
+  font-size: 1rem;
+  background-color: transparent;
+}

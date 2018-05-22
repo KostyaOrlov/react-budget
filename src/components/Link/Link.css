@@ -1,0 +1,12 @@
+.active {
+  border-bottom: 2px solid white;
+  padding-bottom: 0.5rem;
+  margin: 1rem;
+  cursor: pointer;
+}
+
+.link {
+  padding-bottom: 0.5rem;
+  margin: 1rem;
+  cursor: pointer;
+}

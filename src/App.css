@@ -1,0 +1,49 @@
+body {
+  background: linear-gradient(
+    to top right,
+    #1d21ee 30%,
+    #348de0 50%,
+    #23c4da 90%
+  );
+  margin: 0;
+  padding: 0;
+}
+.sectionContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.993);
+  font-size: 1rem;
+}
+
+.header {
+  margin: 0 auto;
+  padding: 2rem;
+  font-size: 1.5rem;
+}
+
+.infoContainer {
+  font-size: 1.1rem;
+}
+
+.dateLine {
+  display: flex;
+  align-items: center;
+}
+
+.navContainer {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.table {
+  width: 450px;
+  margin: 10vh auto;
+  text-align: center;
+}
+
+*:focus {
+  outline: none;
+}

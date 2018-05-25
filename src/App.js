@@ -4,6 +4,15 @@ import moment from "moment";
 import Button from "./components/Button/Button";
 import Link from "./components/Link/Link";
 import InputForm from "./components/InputForm/InputForm";
+import Table from "./Table/Table";
+
+const dateFormat = "DD.MM.YYYY";
+
+function filterMonthTransactions(transactions, date) {
+  return transactions.filter(transaction =>
+    moment(transaction.date, dateFormat).isSame(date, "month")
+  );
+}
 
 class App extends Component {
   constructor(props) {
@@ -43,7 +52,7 @@ class App extends Component {
     const { date: TodayDate, transactions } = this.state;
 
     const newTransaction = {
-      date: TodayDate.format("DD.MM.YYYY"),
+      date: TodayDate.format(dateFormat),
       sum,
       category
     };
@@ -51,8 +60,8 @@ class App extends Component {
     const newTransactions = [...transactions, newTransaction];
 
     newTransactions.sort((a, b) => {
-      const aDate = moment(a.date, "DD.MM.YYYY");
-      const bDate = moment(b.date, "DD.MM.YYYY");
+      const aDate = moment(a.date, dateFormat);
+      const bDate = moment(b.date, dateFormat);
       return aDate.isAfter(bDate);
     });
 
@@ -70,11 +79,12 @@ class App extends Component {
   getIncomes = () => {
     const { transactions, date } = this.state;
 
-    const incomes = transactions
-      .filter(({ date: transactionDate }) =>
-        moment(transactionDate, "DD.MM.YYYY").isSame(date, "month")
-      )
-      .reduce((acc, { sum }) => (sum > 0 ? acc + sum : acc), 0);
+    const filteredTransactions = filterMonthTransactions(transactions, date);
+
+    const incomes = filteredTransactions.reduce(
+      (acc, { sum }) => (sum > 0 ? acc + sum : acc),
+      0
+    );
 
     return incomes;
   };
@@ -82,11 +92,12 @@ class App extends Component {
   getExpanses = () => {
     const { transactions, date } = this.state;
 
-    const expanses = transactions
-      .filter(({ date: transactionDate }) =>
-        moment(transactionDate, "DD.MM.YYYY").isSame(date, "month")
-      )
-      .reduce((acc, { sum }) => (sum < 0 ? acc + sum : acc), 0);
+    const filteredTransactions = filterMonthTransactions(transactions, date);
+
+    const expanses = filteredTransactions.reduce(
+      (acc, { sum }) => (sum < 0 ? acc + sum : acc),
+      0
+    );
 
     return expanses;
   };
@@ -94,11 +105,9 @@ class App extends Component {
   getTotal = () => {
     const { transactions, date } = this.state;
 
-    const total = transactions
-      .filter(({ date: transactionDate }) =>
-        moment(transactionDate, "DD.MM.YYYY").isSame(date, "month")
-      )
-      .reduce((acc, { sum }) => acc + sum, 0);
+    const filteredTransactions = filterMonthTransactions(transactions, date);
+
+    const total = filteredTransactions.reduce((acc, { sum }) => acc + sum, 0);
 
     return total;
   };
@@ -108,7 +117,7 @@ class App extends Component {
       this.getTotal() / (moment().daysInMonth() - moment().date());
 
     console.log(dailyBudget);
-    return dailyBudget;
+    return Math.round(dailyBudget);
   };
 
   render() {
@@ -118,7 +127,7 @@ class App extends Component {
         <header className={styles.header}>
           <h1>Реактивный бюджет</h1>
           <div className={styles.dateLine}>
-            <p>{date.format("DD.MM.YYYY")}</p>
+            <p>{date.format(dateFormat)}</p>
             <Button onClick={this.handleSubstractDay}>-</Button>
             <Button onClick={this.handleAddDay}>+</Button>
           </div>
@@ -156,26 +165,7 @@ class App extends Component {
             </InputForm>
           )}
 
-          <table className={styles.table}>
-            <tbody>
-              {transactions
-                .filter(({ date: transactionDate }) => {
-                  return moment(transactionDate, "DD.MM.YYYY").isSame(
-                    date,
-                    "month"
-                  );
-                })
-                .map(({ date, sum, category }, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>{date}</td>
-                      <td>{sum}</td>
-                      <td>{category}</td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
+          <Table transactions={transactions} date={date} />
         </main>
       </section>
     );

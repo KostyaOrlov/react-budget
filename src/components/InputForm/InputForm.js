@@ -1,19 +1,46 @@
 import React, { Component } from "react";
 import styles from "./InputForm.css";
+import InputLine from "../InputLine/InputLine";
+
+const INPUT_FIELDS = [
+  {
+    type: "number",
+    placeholder: "Введите сумму",
+    name: "transaction",
+    label: "Внести расходы"
+  },
+  {
+    placeholder: "Введите кетегорию",
+    name: "category",
+    label: "Внести доход"
+  },
+  {
+    placeholder: "Введите ник",
+    name: "username",
+    label: "Внести ник"
+  },
+  {
+    placeholder: "Введите Имя",
+    name: "name",
+    label: "Внести Имя"
+  }
+];
 
 class InputForm extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      transaction: null,
-      category: null
+      transaction: "",
+      category: "",
+      name: "",
+      username: ""
     };
   }
 
   handleChangeInput = event => {
     if (event.target.name === "transaction") {
-      this.setState({ transaction: +event.target.value });
+      this.setState({ transaction: event.target.value });
     } else {
       this.setState({ category: event.target.value });
     }
@@ -33,36 +60,58 @@ class InputForm extends Component {
 
     onSubmit(sum, category);
     this.setState({
-      transaction: null,
-      category: null
+      transaction: "",
+      category: ""
     });
   };
 
   render() {
-    const { category, transaction } = this.state;
+    const { category, transaction, name, userName } = this.state;
+    const commonOpts = {
+      className: styles.inputLine,
+      type: "text",
+      onChange: this.handleChangeInput
+    };
+
     return (
       <div className={styles.container}>
-        <div className={styles.inputLine}>
-          <label>{this.props.children}</label>
-          <input
-            className={styles.input}
-            type="text"
-            placeholder="Введите сумму"
-            name="transaction"
-            value={transaction || ""}
-            onChange={this.handleChangeInput}
-          />
-        </div>
-        <div className={styles.inputLine}>
-          <label>Категория</label>
-          <input
-            className={styles.input}
-            placeholder="Введите категорию"
-            name="category"
-            value={category || ""}
-            onChange={this.handleChangeInput}
-          />
-        </div>
+        {INPUT_FIELDS.map(item => (
+          <InputLine {...commonOpts} {...item} value={this.state[item.name]} />
+        ))}
+
+        {/* <InputLine
+          {...commonOpts}
+          type="number"
+          placeholder="Введите сумму"
+          name="transaction"
+          label="Внести расходы"
+          value={transaction}
+        />
+
+        <InputLine
+          {...commonOpts}
+          placeholder="Введите кетегорию"
+          name="category"
+          label="Внести доход"
+          value={category}
+        />
+
+        <InputLine
+          {...commonOpts}
+          placeholder="Введите ник"
+          name="username"
+          label="Внести ник"
+          value={userName}
+        />
+
+        <InputLine
+          {...commonOpts}
+          placeholder="Введите Имя"
+          name="name"
+          label="Внести Имя"
+          value={name}
+        /> */}
+
         <button className={styles.button} onClick={this.handleEnter}>
           Внести
         </button>

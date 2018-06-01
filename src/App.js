@@ -4,15 +4,9 @@ import moment from "moment";
 import Button from "./components/Button/Button";
 import Link from "./components/Link/Link";
 import InputForm from "./components/InputForm/InputForm";
-import Table from "./Table/Table";
-
-const dateFormat = "DD.MM.YYYY";
-
-function filterMonthTransactions(transactions, date) {
-  return transactions.filter(transaction =>
-    moment(transaction.date, dateFormat).isSame(date, "month")
-  );
-}
+import Table from "./components/Table/Table";
+import { DateFormat, filterMonthTransactions } from "./helpers";
+import List from "./components/List/List";
 
 class App extends Component {
   constructor(props) {
@@ -52,7 +46,7 @@ class App extends Component {
     const { date: TodayDate, transactions } = this.state;
 
     const newTransaction = {
-      date: TodayDate.format(dateFormat),
+      date: TodayDate.format(DateFormat),
       sum,
       category
     };
@@ -60,8 +54,8 @@ class App extends Component {
     const newTransactions = [...transactions, newTransaction];
 
     newTransactions.sort((a, b) => {
-      const aDate = moment(a.date, dateFormat);
-      const bDate = moment(b.date, dateFormat);
+      const aDate = moment(a.date, DateFormat);
+      const bDate = moment(b.date, DateFormat);
       return aDate.isAfter(bDate);
     });
 
@@ -127,7 +121,7 @@ class App extends Component {
         <header className={styles.header}>
           <h1>Реактивный бюджет</h1>
           <div className={styles.dateLine}>
-            <p>{date.format(dateFormat)}</p>
+            <p>{date.format(DateFormat)}</p>
             <Button onClick={this.handleSubstractDay}>-</Button>
             <Button onClick={this.handleAddDay}>+</Button>
           </div>
@@ -156,16 +150,13 @@ class App extends Component {
             </Link>
           </nav>
           {navSelected === "expanse" ? (
-            <InputForm name="expanse" onSubmit={this.handleSubmitTransaction}>
-              Внести расходы
-            </InputForm>
+            <InputForm name="expanse" onSubmit={this.handleSubmitTransaction} />
           ) : (
-            <InputForm name="incomes" onSubmit={this.handleSubmitTransaction}>
-              Внести доход
-            </InputForm>
+            <InputForm name="incomes" onSubmit={this.handleSubmitTransaction} />
           )}
 
           <Table transactions={transactions} date={date} />
+          <List />
         </main>
       </section>
     );

@@ -2,13 +2,39 @@ import React, { Component } from "react";
 import styles from "./InputForm.css";
 import InputLine from "../InputLine/InputLine";
 
+const INPUT_FIELDS = [
+  {
+    type: "number",
+    placeholder: "Введите сумму",
+    name: "transaction",
+    label: "Внести расходы"
+  },
+  {
+    placeholder: "Введите кетегорию",
+    name: "category",
+    label: "Внести доход"
+  },
+  {
+    placeholder: "Введите ник",
+    name: "username",
+    label: "Внести ник"
+  },
+  {
+    placeholder: "Введите Имя",
+    name: "name",
+    label: "Внести Имя"
+  }
+];
+
 class InputForm extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       transaction: "",
-      category: ""
+      category: "",
+      name: "",
+      username: ""
     };
   }
 
@@ -40,30 +66,52 @@ class InputForm extends Component {
   };
 
   render() {
-    const { category, transaction } = this.state;
+    const { category, transaction, name, userName } = this.state;
+    const commonOpts = {
+      className: styles.inputLine,
+      type: "text",
+      onChange: this.handleChangeInput
+    };
+
     return (
       <div className={styles.container}>
-        <InputLine
-          className={styles.inputLine}
+        {INPUT_FIELDS.map(item => (
+          <InputLine {...commonOpts} {...item} value={this.state[item.name]} />
+        ))}
+
+        {/* <InputLine
+          {...commonOpts}
           type="number"
           placeholder="Введите сумму"
           name="transaction"
+          label="Внести расходы"
           value={transaction}
-          onChange={this.handleChangeInput}
-        >
-          {this.props.children}
-        </InputLine>
+        />
 
         <InputLine
-          className={styles.inputLine}
-          type="text"
+          {...commonOpts}
           placeholder="Введите кетегорию"
           name="category"
+          label="Внести доход"
           value={category}
-          onChange={this.handleChangeInput}
-        >
-          {this.props.children}
-        </InputLine>
+        />
+
+        <InputLine
+          {...commonOpts}
+          placeholder="Введите ник"
+          name="username"
+          label="Внести ник"
+          value={userName}
+        />
+
+        <InputLine
+          {...commonOpts}
+          placeholder="Введите Имя"
+          name="name"
+          label="Внести Имя"
+          value={name}
+        /> */}
+
         <button className={styles.button} onClick={this.handleEnter}>
           Внести
         </button>
